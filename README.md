@@ -30,15 +30,22 @@
 
 | Method | Route | Description |
 |---------|-------|-------------|
-| GET | / | Home page |
-| GET | /listings | List all listings |
-| GET | /listings/new | New listing form |
-| POST | /listings | Create listing |
-| GET | /listings/:id | View listing |
-| GET | /listings/:id/edit | Edit listing form |
-| PUT | /listings/:id | Update listing |
-| DELETE | /listings/:id | Delete listing |
-
+| GET | /auth/sign-up | New user registration form |
+| POST | /auth/sign-up | Create a new user account |
+| GET | /auth/sign-in | User login form |
+| POST | /auth/sign-in | Authenticate user session |
+| GET | /auth/sign-out | End current user session |
+| GET | /photos | View main gallery of all photos |
+| GET | /photos/new | Upload new photo form |
+| POST | /photos | Save new photo to the database |
+| GET | /photos/:id | View a single photo and its reviews |
+| GET | /photos/:id/edit | Edit photo form |
+| PUT | /photos/:id | Update photo details |
+| DELETE | /photos/:id | Delete photo and associated reviews |
+| POST | /photos/:photoId/reviews | Create a new review for a photo |
+| GET | /photos/:photoId/reviews/:reviewId/edit | Edit review form |
+| PUT | /photos/:photoId/reviews/:reviewId | Update review text and rating |
+| DELETE | /photos/:photoId/reviews/:reviewId | Delete a specific review |
 
 
 ## Features

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Gallery - ShutterShare</title>
+</head>
+<body>
+    <%- include('../partials/navbar.ejs') %>
+    <h1>My Gallery</h1>
+
+    <div class="gallery-container">
+    <% photos.forEach(photo => { %>
+      <div class="photo-card">
+        <img src="<%= photo.imageUrl %>" alt="<%= photo.title %>" style="max-width: 200px;">
+        <h3><%= photo.title %></h3>
+        <p>Status: <%= photo.visibility %></p>
+        <a href="/photos/<%= photo._id %>/edit">Edit Photo</a>
+      </div>
+    <% }) %>
+  </div>
+</body>
+</html>

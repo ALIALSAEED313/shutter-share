@@ -13,7 +13,6 @@ const userSchema = new mongoose.Schema({
   },
   profileName:{
     type: String,
-    required: true
   }
 }, {timestamps: true});
 

@@ -1,35 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload Photo - ShutterShare</title>
 </head>
+
 <body>
     <%- include('../partials/navbar.ejs') %>
 
-    <main>
-    <h1>Upload a New Photo</h1>
-    
-    <form action="/photos" method="POST">
-      <div>
-        <label for="title">Photo Title:</label>
-        <input type="text" name="title" id="title" required>
-      </div>
+        <main>
+            <h1>Upload a New Photo</h1>
 
-      <div>
-        <label for="imageUrl">Image URL:</label>
-        <input type="text" name="imageUrl" id="imageUrl" required>
-      </div>
+            <form action="/photos" method="POST" enctype="multipart/form-data">
+                <div>
+                    <label for="title">Photo Title:</label>
+                    <input type="text" name="title" id="title" required>
+                </div>
 
-      <div>
-        <label for="cameraSettings">Camera Settings (Optional):</label>
-        <input type="text" name="cameraSettings" id="cameraSettings" placeholder="e.g. f/1.8, ISO 100, 1/200s">
-      </div>
+                <div>
+                    <label for="image">Upload Photo:</label>
+                    <input type="file" name="image" id="image" accept="image/*" required>
+                </div>
 
-      <button type="submit">Upload to Gallery</button>
-    </form>
-  </main>
-  
+                <div>
+                    <label for="cameraSettings">Camera Settings (Optional):</label>
+                    <input type="text" name="cameraSettings" id="cameraSettings"
+                        placeholder="e.g. f/1.8, ISO 100, 1/200s">
+                </div>
+
+                <div>
+                    <label>Visibility:</label>
+                    <input type="radio" name="visibility" value="public" checked> Public
+                    <input type="radio" name="visibility" value="private"> Private
+                </div>
+
+                <button type="submit">Upload to Gallery</button>
+            </form>
+        </main>
+
 </body>
+
 </html>

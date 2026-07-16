@@ -13,12 +13,16 @@ const photoSchema = new mongoose.Schema({
   },
   cameraSettings: {
     type: String,
-    // Optional field, so no 'required: true'
   },
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
+  },
+  visibility: {
+    type: String,
+    enum: ['public', 'private'], // Limits the values to only these two
+    default: 'public'
   }
 }, { 
   timestamps: true 

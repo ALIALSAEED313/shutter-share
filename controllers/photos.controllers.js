@@ -5,10 +5,7 @@ const isSignedIn = require('../middleware/is-signed-in');
 const upload = require('../middleware/upload')
 
 
-router.get('/' , async (req , res) => {
-    const allPhotos = await Photo.find({visibility: 'public'}).populate('ownerId')
-    res.render('photos/index.ejs', { photos: allPhotos })
-})
+
 
 
 router.get('/new', isSignedIn , async (req , res) =>{
@@ -18,7 +15,7 @@ router.get('/new', isSignedIn , async (req , res) =>{
 
 router.post('/', isSignedIn, upload.single('image') ,async (req, res) => {
     req.body.ownerId = req.session.user._id
-
+    req.body.visibility = req.body.visibility || 'public'
     if(req.file) {
         req.body.imageUrl = req.file.path
     } else {
@@ -34,6 +31,45 @@ router.get('/my-gallery', isSignedIn, async (req , res) => {
     res.render('photos/my-gallery.ejs', {photos: myPhotos})
 })
 
+
+router.post('/:photoId/reviews', isSignedIn, async (req, res)=>{
+
+})
+
+
+router.delete('/photos/:photoId' , isSignedIn, async (req , res) => {
+    const photo = await Photo.findById(req.params.photoId)
+
+    if(photo.ownerId.equals(req.session.user._id)) {
+        await photo.deleteOne()
+        res.redirect('photos/my-gallery')
+    } else {
+        res.send("You are not authorized to delete this photo.")
+    }
+})
+
+router.delete('/photos/:photoId/reviews/:reviewId', isSignedIn, async (req , res) => {
+    const photo = await Photo.findById(req.params.photoId)
+    const review = photo.reviews.id(req.params.reviewId)
+
+
+    if(photo.ownerId.equals(req.session.user._id) || review.authorId.equals(req.session.user._id)) {
+        review.deleteOne()
+        await photo.save()
+        res.redirect(`/photos/${req.params.photoId}`)
+    } else {
+        res.send("You are not authorized to delete this review.")
+    }
+})
+
+router.get('/:photoId' , async (req , res) => {
+    const photo = await Photo.findById(req.params.photoId).populate('ownerId')
+    res.render('photos/show.ejs')
+})
+
+router.get('/:photoId/edit' , isSignedIn , async (req , res) => {
+    
+})
 
 
 

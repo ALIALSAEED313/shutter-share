@@ -7,6 +7,22 @@
 </head>
 <body>
     <%- include('./partials/navbar') %>
-    <h1>Shutter Share</h1>
+    <h1>Shutter Share - Public Gallery</h1>
+
+    <div class="gallery-container">
+        <% if (photos && photos.length > 0) { %>
+            <% photos.forEach(photo => { %>
+                <div class="photo-card">
+                    <img src="<%= photo.imageUrl %>" alt="<%= photo.title %>" style="max-width: 300px;">
+                    <h3><%= photo.title %></h3>
+                    <p>Uploaded by: <%= photo.ownerId ? photo.ownerId.profileName : 'Unknown' %></p>
+                    <a href="/photos/<%= photo._id %>">View Details</a>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <p>No public photos to display yet. Be the first to share!</p>
+        <% } %>
+    </div>
+    
 </body>
 </html>

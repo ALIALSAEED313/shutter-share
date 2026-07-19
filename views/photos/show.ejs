@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Details - ShutterShare</title>
+</head>
+<body>
+    <%- include('../partials/navbar.ejs') %>
+
+    <h1><%=photo.title%></h1>
+    <img src="<%= photo.imageUrl%>" alt="<%= photo.title%>" style="max-width: 500px;">
+    <p><strong>Uploaded by:</strong> <%=photo.ownerId.profileName%></p>
+
+    <% if (user && photo.ownerId._id.equals(user._id)) { %>
+        <a href="/photos/<%= photo._id %>/edit">Edit Photo</a>
+    <form action="/photos/<%= photo._id %>?_method=DELETE" method="POST">
+      <button type="submit">Delete Photo</button>
+    </form>
+        <strong% } %>
+
+
+    <hr>
+
+    <h3><strong>Reviews</strong></h3>
+    <% photo.reviews.forEach(review => { %>
+        <p> <%=review.text%> - Rating: <%=review.rating%> </p>
+
+        <% if(user && (photo.ownerId._id.equals(user._id) || review.authorId.equals(user._id))) { %>
+            <form action="/photos/<%= photo._id%>/reviews/<%= review._id%>?_method=DELETE" method="post">
+                <button type="submit">Delete Review</button>
+            </form>
+        <% } %>
+    <% }) %>
+
+
+    <% if(user) { %>
+        <h4>Leave a Review</h4>
+        <form action="/photos/<%= photo._id %>/reviews" method="POST">
+        <textarea name="text" required></textarea>
+        <input type="number" name="rating" min="1" max="5" required>
+        <button type="submit">Submit Review</button>
+    </form>
+    <% } else {%>
+        <p><a href="/auth/sign-in">Sign in</a> to leave a review.</p>
+    <% } %>
+</body>
+</html>

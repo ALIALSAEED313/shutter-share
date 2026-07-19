@@ -17,7 +17,7 @@
     <form action="/photos/<%= photo._id %>?_method=DELETE" method="POST">
       <button type="submit">Delete Photo</button>
     </form>
-        <strong% } %>
+        <% } %>
 
 
     <hr>
@@ -38,6 +38,7 @@
         <h4>Leave a Review</h4>
         <form action="/photos/<%= photo._id %>/reviews" method="POST">
         <textarea name="text" required></textarea>
+        <label for="rating">Raiting:</label>
         <input type="number" name="rating" min="1" max="5" required>
         <button type="submit">Submit Review</button>
     </form>

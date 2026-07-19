@@ -3,6 +3,7 @@ const router = express.Router()
 const Photo = require('../models/Photo')
 const isSignedIn = require('../middleware/is-signed-in');
 const upload = require('../middleware/upload')
+const Reviews = require('../models/Review')
 
 
 
@@ -63,12 +64,33 @@ router.delete('/photos/:photoId/reviews/:reviewId', isSignedIn, async (req , res
 })
 
 router.get('/:photoId' , async (req , res) => {
-    const photo = await Photo.findById(req.params.photoId).populate('ownerId')
-    res.render('photos/show.ejs')
+    const foundPhoto = await Photo.findById(req.params.photoId).populate('ownerId').populate('reviews')
+
+    if(!foundPhoto){
+        return res.redirect('/photos')
+    }
+    res.render('photos/show.ejs' , {photo: foundPhoto})
 })
 
 router.get('/:photoId/edit' , isSignedIn , async (req , res) => {
-    
+    const photo = await Photo.findById(req.params.photoId)
+
+    if(!photo.ownerId.equals(req.session.user._id)) {
+        return res.redirect('/photos')
+    }
+    res.render('photos/edit.ejs', {photo})
+
+})
+
+router.post('/:photoId' , isSignedIn , async (req , res) => {
+    const photo = await Photo.findById(req.params.photoId)
+
+    if(photo.ownerId.equals(req.session.user._id)){
+        await photo.updateOne(req.body)
+        res.redirect(`/photos/${req.params.photoId}`)
+    }else {
+        res.send("You are not authorized to edit this photo")
+    }
 })
 
 

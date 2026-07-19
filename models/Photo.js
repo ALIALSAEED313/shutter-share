@@ -23,7 +23,11 @@ const photoSchema = new mongoose.Schema({
     type: String,
     enum: ['public', 'private'], // Limits the values to only these two
     default: 'public'
-  }
+  },
+  reviews: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Review'
+  }]
 }, { 
   timestamps: true 
 })

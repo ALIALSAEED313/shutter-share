@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Photo - ShutterShare</title>
+</head>
+
+<body>
+    <h1>Edit Photo</h1>
+    <form action="/photos/<%= photo._id %>" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="title">Photo Title:</label>
+            <input type="text" name="title" id="title" value="<%= photo.title %>" required>
+
+        <div>
+            <label for="cameraSettings">Camera Settings (Optional):</label>
+            <input type="text" name="cameraSettings" id="cameraSettings" placeholder="e.g. f/1.8, ISO 100, 1/200s" value="<%= photo.cameraSettings %>">
+        </div>
+
+        <div>
+            <label>Visibility:</label>
+            <input type="radio" name="visibility" value="public" checked> Public
+            <input type="radio" name="visibility" value="private"> Private
+        </div>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</body>
+
+</html>

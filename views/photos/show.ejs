@@ -28,6 +28,7 @@
     <h3><strong>Reviews</strong></h3>
     <% photo.reviews.forEach(review => { %>
         <p> <%=review.text%> - Rating: <%=review.rating%> </p>
+        <p><small>Written By: <%=review.authorId?.profileName%></small></p>
 
         <% if(user && (photo.ownerId._id.equals(user._id) || review.authorId.equals(user._id))) { %>
             <form action="/photos/<%= photo._id%>/reviews/<%= review._id%>?_method=DELETE" method="post">

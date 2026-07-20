@@ -3,7 +3,7 @@ const router = express.Router()
 const Photo = require('../models/Photo')
 const isSignedIn = require('../middleware/is-signed-in');
 const upload = require('../middleware/upload')
-const Reviews = require('../models/Review')
+const Review = require('../models/Review')
 
 
 
@@ -24,7 +24,7 @@ router.post('/', isSignedIn, upload.single('image') ,async (req, res) => {
     }
 
     await Photo.create(req.body)
-    res.redirect('/photos')
+    res.redirect('/photos/my-gallery')
 })
 
 router.get('/my-gallery', isSignedIn, async (req , res) => {
@@ -35,6 +35,16 @@ router.get('/my-gallery', isSignedIn, async (req , res) => {
 
 router.post('/:photoId/reviews', isSignedIn, async (req, res)=>{
 
+    req.body.authorId = req.session.user._id
+    req.body.photoId = req.params.photoId
+
+    const newReview = await Review.create(req.body)
+    const photo = await Photo.findById(req.params.photoId)
+
+    photo.reviews.push(newReview._id)
+    await photo.save()
+
+    res.redirect(`/photos/${req.params.photoId}`)
 })
 
 
@@ -49,22 +59,12 @@ router.delete('/photos/:photoId' , isSignedIn, async (req , res) => {
     }
 })
 
-router.delete('/photos/:photoId/reviews/:reviewId', isSignedIn, async (req , res) => {
-    const photo = await Photo.findById(req.params.photoId)
-    const review = photo.reviews.id(req.params.reviewId)
 
-
-    if(photo.ownerId.equals(req.session.user._id) || review.authorId.equals(req.session.user._id)) {
-        review.deleteOne()
-        await photo.save()
-        res.redirect(`/photos/${req.params.photoId}`)
-    } else {
-        res.send("You are not authorized to delete this review.")
-    }
-})
 
 router.get('/:photoId' , async (req , res) => {
-    const foundPhoto = await Photo.findById(req.params.photoId).populate('ownerId').populate('reviews')
+    const foundPhoto = await Photo.findById(req.params.photoId).populate('ownerId').populate({path:'reviews',
+        populate:{path: 'authorId'}
+    })
 
     if(!foundPhoto){
         return res.redirect('/photos')
@@ -94,6 +94,32 @@ router.post('/:photoId' , isSignedIn , async (req , res) => {
         res.send("You are not authorized to edit this photo.")
     }
 
+})
+
+router.delete('/:photoId/reviews/:reviewId', isSignedIn, async (req , res) => {
+    const photo = await Photo.findById(req.params.photoId)
+    const review = await Review.findById(req.params.reviewId)
+
+    if(photo.ownerId.equals(req.session.user._id) || review.authorId.equals(req.session.user._id)) {
+
+        await Review.findByIdAndDelete(req.params.reviewId)
+        await photo.updateOne({$pull: {reviews: req.params.reviewId}})
+
+        res.redirect(`/photos/${req.params.photoId}`)
+    }
+})
+
+router.delete('/:photoId' , isSignedIn , async (req , res) => {
+
+    const photo = await Photo.findById(req.params.photoId)
+
+    if(photo.ownerId.equals(req.session.user._id)){
+
+        await Review.deleteMany({_id: {$in: photo.reviews}})
+
+        await photo.deleteOne()
+        res.redirect('/photos/my-gallery')
+    }
 })
 
 

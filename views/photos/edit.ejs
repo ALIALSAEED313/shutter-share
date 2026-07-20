@@ -9,7 +9,7 @@
 
 <body>
     <h1>Edit Photo</h1>
-    <form action="/photos/<%= photo._id %>" method="POST" enctype="multipart/form-data">
+    <form action="/photos/<%= photo._id %>" method="POST">
         <div>
             <label for="title">Photo Title:</label>
             <input type="text" name="title" id="title" value="<%= photo.title %>" required>
@@ -21,8 +21,8 @@
 
         <div>
             <label>Visibility:</label>
-            <input type="radio" name="visibility" value="public" checked> Public
-            <input type="radio" name="visibility" value="private"> Private
+            <input type="radio" name="visibility" value="public" <%= photo.visibility === 'public' ? 'checked' : '' %> > Public
+            <input type="radio" name="visibility" value="private" <%= photo.visibility === 'private' ? 'checked' : '' %> > Private
         </div>
 
         <button type="submit">Save Changes</button>

@@ -83,14 +83,17 @@ router.get('/:photoId/edit' , isSignedIn , async (req , res) => {
 })
 
 router.post('/:photoId' , isSignedIn , async (req , res) => {
-    const photo = await Photo.findById(req.params.photoId)
 
-    if(photo.ownerId.equals(req.session.user._id)){
-        await photo.updateOne(req.body)
+    delete req.body._id
+
+    const updatedPhoto = await Photo.findOneAndUpdate({_id: req.params.photoId, ownerId: req.session.user._id} , req.body, {new: true})
+
+    if (updatedPhoto) {
         res.redirect(`/photos/${req.params.photoId}`)
-    }else {
-        res.send("You are not authorized to edit this photo")
+    } else {
+        res.send("You are not authorized to edit this photo.")
     }
+
 })
 
 

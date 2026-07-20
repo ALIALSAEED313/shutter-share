@@ -11,6 +11,9 @@
     <h1><%=photo.title%></h1>
     <img src="<%= photo.imageUrl%>" alt="<%= photo.title%>" style="max-width: 500px;">
     <p><strong>Uploaded by:</strong> <%=photo.ownerId.profileName%></p>
+    <p><strong>Camera Settings:</strong> <%=photo.cameraSettings%></p>
+    <p><strong> <%=photo.visibility%> Photo</strong></p>
+
 
     <% if (user && photo.ownerId._id.equals(user._id)) { %>
         <a href="/photos/<%= photo._id %>/edit">Edit Photo</a>

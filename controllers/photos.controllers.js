@@ -7,13 +7,16 @@ const Review = require('../models/Review')
 
 
 
-
-
+// get /photos/new
+// Renders the form for a user to upload a new photo
 router.get('/new', isSignedIn , async (req , res) =>{
     res.render('photos/new.ejs')
 })
 
 
+// POST /photos
+// Handles the new photo form submission, uploads the image, 
+// and creates the photo document in the database
 router.post('/', isSignedIn, upload.single('image') ,async (req, res) => {
     req.body.ownerId = req.session.user._id
     req.body.visibility = req.body.visibility || 'public'
@@ -27,12 +30,18 @@ router.post('/', isSignedIn, upload.single('image') ,async (req, res) => {
     res.redirect('/photos/my-gallery')
 })
 
+// GET /photos/my-gallery
+// Fetches all photos owned by the logged-in user 
+// and renders their personal gallery page
 router.get('/my-gallery', isSignedIn, async (req , res) => {
     const myPhotos = await Photo.find({ ownerId: req.session.user._id}).populate('ownerId')
     res.render('photos/my-gallery.ejs', {photos: myPhotos})
 })
 
 
+// POST /photos/:photoId/reviews
+// Creates a new review for a specific photo and 
+// links the review to the photo's reviews array
 router.post('/:photoId/reviews', isSignedIn, async (req, res)=>{
 
     req.body.authorId = req.session.user._id
@@ -48,6 +57,9 @@ router.post('/:photoId/reviews', isSignedIn, async (req, res)=>{
 })
 
 
+// GET /photos/:photoId
+// Fetches a single photo by its ID, populates the owner 
+// and reviews (with authors), and renders the show/details page
 router.get('/:photoId' , async (req , res) => {
     const foundPhoto = await Photo.findById(req.params.photoId).populate('ownerId').populate({path:'reviews',
         populate:{path: 'authorId'}
@@ -59,6 +71,10 @@ router.get('/:photoId' , async (req , res) => {
     res.render('photos/show.ejs' , {photo: foundPhoto})
 })
 
+
+// GET /photos/:photoId/edit
+// Renders the form to edit an existing photo's details
+// (Checks ownership before rendering)
 router.get('/:photoId/edit' , isSignedIn , async (req , res) => {
     const photo = await Photo.findById(req.params.photoId)
 
@@ -69,6 +85,10 @@ router.get('/:photoId/edit' , isSignedIn , async (req , res) => {
 
 })
 
+
+// POST /photos/:photoId
+// Handles the edit photo form submission and updates 
+// the photo details in the database
 router.post('/:photoId' , isSignedIn , async (req , res) => {
 
     delete req.body._id
@@ -83,6 +103,10 @@ router.post('/:photoId' , isSignedIn , async (req , res) => {
 
 })
 
+
+// DELETE /photos/:photoId/reviews/:reviewId
+// Deletes a specific review and removes its ID from 
+// the photo's reviews array
 router.delete('/:photoId/reviews/:reviewId', isSignedIn, async (req , res) => {
     const photo = await Photo.findById(req.params.photoId)
     const review = await Review.findById(req.params.reviewId)
@@ -96,6 +120,9 @@ router.delete('/:photoId/reviews/:reviewId', isSignedIn, async (req , res) => {
     }
 })
 
+// DELETE /photos/:photoId
+// Deletes a photo entirely, and also deletes all 
+// reviews associated with that photo
 router.delete('/:photoId' , isSignedIn , async (req , res) => {
 
     const photo = await Photo.findById(req.params.photoId)
@@ -109,6 +136,9 @@ router.delete('/:photoId' , isSignedIn , async (req , res) => {
     }
 })
 
+
+// GET /photos/:photoId/reviews/:reviewId/edit
+// Renders the form to edit an existing review
 router.get('/:photoId/reviews/:reviewId/edit' , isSignedIn, async (req , res) => {
 
     const photo = await Photo.findById(req.params.photoId)
@@ -122,7 +152,9 @@ router.get('/:photoId/reviews/:reviewId/edit' , isSignedIn, async (req , res) =>
     }
 })
 
-
+// PUT /photos/:photoId/reviews/:reviewId
+// Handles the edit review form submission and updates 
+// the review text/rating in the database
 router.put('/:photoId/reviews/:reviewId', isSignedIn, async (req , res) => {
     const review = await Review.findById(req.params.reviewId)
 

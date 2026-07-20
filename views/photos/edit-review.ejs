@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Review - ShutterShare</title>
+</head>
+<body>
+    <h1>Edit Your Review</h1>
+
+    <form action="/photos/<%= photo._id %>/reviews/<%= review._id %>?_method=PUT" method="POST">
+        
+        <div>
+            <label for="text">Review:</label>
+            <textarea name="text" id="text" required><%= review.text %></textarea>
+        </div>
+
+        <div>
+            <label for="rating">Rating (1-5):</label>
+            <input type="number" name="rating" id="rating" min="1" max="5" value="<%= review.rating %>" required>
+        </div>
+
+        <button type="submit">Update Review</button>
+        <a href="/photos/<%= photo._id %>">Cancel</a>
+    </form>
+</body>
+</html>

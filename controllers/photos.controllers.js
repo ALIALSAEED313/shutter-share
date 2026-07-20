@@ -48,19 +48,6 @@ router.post('/:photoId/reviews', isSignedIn, async (req, res)=>{
 })
 
 
-router.delete('/photos/:photoId' , isSignedIn, async (req , res) => {
-    const photo = await Photo.findById(req.params.photoId)
-
-    if(photo.ownerId.equals(req.session.user._id)) {
-        await photo.deleteOne()
-        res.redirect('photos/my-gallery')
-    } else {
-        res.send("You are not authorized to delete this photo.")
-    }
-})
-
-
-
 router.get('/:photoId' , async (req , res) => {
     const foundPhoto = await Photo.findById(req.params.photoId).populate('ownerId').populate({path:'reviews',
         populate:{path: 'authorId'}
@@ -119,6 +106,32 @@ router.delete('/:photoId' , isSignedIn , async (req , res) => {
 
         await photo.deleteOne()
         res.redirect('/photos/my-gallery')
+    }
+})
+
+router.get('/:photoId/reviews/:reviewId/edit' , isSignedIn, async (req , res) => {
+
+    const photo = await Photo.findById(req.params.photoId)
+    const review = await Review.findById(req.params.reviewId)
+
+    if(review.authorId.equals(req.session.user._id)) {
+        res.render('photos/edit-review.ejs' , {photo, review})
+    }
+    else {
+        res.send("You are not authorized to edit this review.")
+    }
+})
+
+
+router.put('/:photoId/reviews/:reviewId', isSignedIn, async (req , res) => {
+    const review = await Review.findById(req.params.reviewId)
+
+    if(review.authorId.equals(req.session.user._id)) {
+        await review.updateOne(req.body)
+        res.redirect(`/photos/${req.params.photoId}`)
+    }
+    else {
+        res.send("You are not authorized to update this review.")
     }
 })
 

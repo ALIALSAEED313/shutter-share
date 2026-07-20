@@ -30,6 +30,12 @@
         <p> <%=review.text%> - Rating: <%=review.rating%> </p>
         <p><small>Written By: <%=review.authorId?.profileName%></small></p>
 
+
+        <% if (user && review.authorId._id.equals(user._id)) { %>
+            <a href="/photos/<%= photo._id %>/reviews/<%= review._id %>/edit">Edit Review</a>
+        <% } %>
+
+
         <% if(user && (photo.ownerId._id.equals(user._id) || review.authorId.equals(user._id))) { %>
             <form action="/photos/<%= photo._id%>/reviews/<%= review._id%>?_method=DELETE" method="post">
                 <button type="submit">Delete Review</button>

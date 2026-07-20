@@ -14,6 +14,9 @@ const photoSchema = new mongoose.Schema({
   cameraSettings: {
     type: String,
   },
+  description: {
+    type: String,
+  },
   ownerId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',

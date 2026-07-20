@@ -23,6 +23,11 @@
                 </div>
 
                 <div class="field">
+                    <label for="description">Story / description</label>
+                    <textarea name="description" id="description" placeholder="Describe the mood, setting, or creative intent behind the image."><%= photo.description || '' %></textarea>
+                </div>
+
+                <div class="field">
                     <label for="cameraSettings">Camera settings</label>
                     <input type="text" name="cameraSettings" id="cameraSettings" placeholder="e.g. f/1.8 · ISO 100 · 1/200s" value="<%= photo.cameraSettings %>">
                 </div>

@@ -21,6 +21,9 @@
                     <div class="meta-list">
                         <p><strong>Photographer:</strong> <%=photo.ownerId.profileName%></p>
                         <p><strong>Camera settings:</strong> <%=photo.cameraSettings%></p>
+                        <% if (photo.description) { %>
+                            <p><strong>Story:</strong> <%=photo.description%></p>
+                        <% } %>
                         <p><strong>Visibility:</strong> <%=photo.visibility%> photo</p>
                     </div>
 

@@ -4,56 +4,90 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photo Details - ShutterShare</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <%- include('../partials/navbar.ejs') %>
+    <div class="page-shell">
+        <%- include('../partials/navbar.ejs') %>
 
-    <h1><%=photo.title%></h1>
-    <img src="<%= photo.imageUrl%>" alt="<%= photo.title%>" style="max-width: 500px;">
-    <p><strong>Uploaded by:</strong> <%=photo.ownerId.profileName%></p>
-    <p><strong>Camera Settings:</strong> <%=photo.cameraSettings%></p>
-    <p><strong> <%=photo.visibility%> Photo</strong></p>
+        <section class="photo-detail" style="margin-top: 1rem;">
+            <div class="photo-hero">
+                <img src="<%= photo.imageUrl%>" alt="<%= photo.title%>">
+            </div>
 
+            <div class="meta-card">
+                <div class="panel">
+                    <h1><%=photo.title%></h1>
+                    <div class="meta-list">
+                        <p><strong>Photographer:</strong> <%=photo.ownerId.profileName%></p>
+                        <p><strong>Camera settings:</strong> <%=photo.cameraSettings%></p>
+                        <p><strong>Visibility:</strong> <%=photo.visibility%> photo</p>
+                    </div>
 
-    <% if (user && photo.ownerId._id.equals(user._id)) { %>
-        <a href="/photos/<%= photo._id %>/edit">Edit Photo</a>
-    <form action="/photos/<%= photo._id %>?_method=DELETE" method="POST">
-      <button type="submit">Delete Photo</button>
-    </form>
-        <% } %>
+                    <% if (user && photo.ownerId._id.equals(user._id)) { %>
+                        <div class="hero-actions" style="margin-top: 1rem;">
+                            <a class="button button-secondary" href="/photos/<%= photo._id %>/edit">Edit photo</a>
+                            <form action="/photos/<%= photo._id %>?_method=DELETE" method="POST">
+                                <button type="submit">Delete photo</button>
+                            </form>
+                        </div>
+                    <% } %>
+                </div>
 
+                <div class="panel">
+                    <h3>Community feedback</h3>
 
-    <hr>
+                    <% if (photo.reviews && photo.reviews.length > 0) { %>
+                        <% photo.reviews.forEach(review => { %>
+                            <div class="review-card">
+                                <p><strong><%=review.authorId?.profileName%></strong></p>
+                                <p><%=review.text%></p>
+                                <p><small>Rating: <%=review.rating%>/5</small></p>
 
-    <h3><strong>Reviews</strong></h3>
-    <% photo.reviews.forEach(review => { %>
-        <p> <%=review.text%> - Rating: <%=review.rating%> </p>
-        <p><small>Written By: <%=review.authorId?.profileName%></small></p>
+                                <% if (user && review.authorId._id.equals(user._id)) { %>
+                                    <a href="/photos/<%= photo._id %>/reviews/<%= review._id %>/edit">Edit review</a>
+                                <% } %>
 
+                                <% if(user && (photo.ownerId._id.equals(user._id) || review.authorId.equals(user._id))) { %>
+                                    <form action="/photos/<%= photo._id%>/reviews/<%= review._id%>?_method=DELETE" method="post">
+                                        <button type="submit">Delete review</button>
+                                    </form>
+                                <% } %>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="empty-state">No reviews yet. Be the first to leave one.</p>
+                    <% } %>
 
-        <% if (user && review.authorId._id.equals(user._id)) { %>
-            <a href="/photos/<%= photo._id %>/reviews/<%= review._id %>/edit">Edit Review</a>
-        <% } %>
-
-
-        <% if(user && (photo.ownerId._id.equals(user._id) || review.authorId.equals(user._id))) { %>
-            <form action="/photos/<%= photo._id%>/reviews/<%= review._id%>?_method=DELETE" method="post">
-                <button type="submit">Delete Review</button>
-            </form>
-        <% } %>
-    <% }) %>
-
-
-    <% if(user) { %>
-        <h4>Leave a Review</h4>
-        <form action="/photos/<%= photo._id %>/reviews" method="POST">
-        <textarea name="text" required></textarea>
-        <label for="rating">Raiting:</label>
-        <input type="number" name="rating" min="1" max="5" required>
-        <button type="submit">Submit Review</button>
-    </form>
-    <% } else {%>
-        <p><a href="/auth/sign-in">Sign in</a> to leave a review.</p>
-    <% } %>
+                    <% if(user) { %>
+                        <form action="/photos/<%= photo._id %>/reviews" method="POST" class="form-grid" style="margin-top: 1rem;">
+                            <div class="field">
+                                <label>Rating</label>
+                                <div class="star-rating">
+                                    <input type="radio" id="star5" name="rating" value="5">
+                                    <label for="star5">★</label>
+                                    <input type="radio" id="star4" name="rating" value="4">
+                                    <label for="star4">★</label>
+                                    <input type="radio" id="star3" name="rating" value="3">
+                                    <label for="star3">★</label>
+                                    <input type="radio" id="star2" name="rating" value="2">
+                                    <label for="star2">★</label>
+                                    <input type="radio" id="star1" name="rating" value="1">
+                                    <label for="star1">★</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <label for="text">Review</label>
+                                <textarea name="text" id="text" required></textarea>
+                            </div>
+                            <button type="submit">Submit review</button>
+                        </form>
+                    <% } else {%>
+                        <p><a href="/auth/sign-in">Sign in</a> to leave a review.</p>
+                    <% } %>
+                </div>
+            </div>
+        </section>
+    </div>
 </body>
 </html>

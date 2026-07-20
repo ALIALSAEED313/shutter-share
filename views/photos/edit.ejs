@@ -5,29 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Photo - ShutterShare</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
-    <%- include('../partials/navbar.ejs') %>
-    <h1>Edit Photo</h1>
-    <form action="/photos/<%= photo._id %>" method="POST">
-        <div>
-            <label for="title">Photo Title:</label>
-            <input type="text" name="title" id="title" value="<%= photo.title %>" required>
+    <div class="page-shell">
+        <%- include('../partials/navbar.ejs') %>
 
-        <div>
-            <label for="cameraSettings">Camera Settings (Optional):</label>
-            <input type="text" name="cameraSettings" id="cameraSettings" placeholder="e.g. f/1.8, ISO 100, 1/200s" value="<%= photo.cameraSettings %>">
-        </div>
+        <main class="panel" style="margin-top: 1rem;">
+            <h1>Edit photo details</h1>
+            <p>Update your image title, camera metadata, and visibility settings while keeping the experience clean and focused.</p>
 
-        <div>
-            <label>Visibility:</label>
-            <input type="radio" name="visibility" value="public" <%= photo.visibility === 'public' ? 'checked' : '' %> > Public
-            <input type="radio" name="visibility" value="private" <%= photo.visibility === 'private' ? 'checked' : '' %> > Private
-        </div>
+            <form action="/photos/<%= photo._id %>" method="POST" class="form-grid" style="margin-top: 1.25rem;">
+                <div class="field">
+                    <label for="title">Photo title</label>
+                    <input type="text" name="title" id="title" value="<%= photo.title %>" required>
+                </div>
 
-        <button type="submit">Save Changes</button>
-    </form>
+                <div class="field">
+                    <label for="cameraSettings">Camera settings</label>
+                    <input type="text" name="cameraSettings" id="cameraSettings" placeholder="e.g. f/1.8 · ISO 100 · 1/200s" value="<%= photo.cameraSettings %>">
+                </div>
+
+                <div class="field">
+                    <label>Visibility</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="visibility" value="public" <%= photo.visibility === 'public' ? 'checked' : '' %>> Public</label>
+                        <label><input type="radio" name="visibility" value="private" <%= photo.visibility === 'private' ? 'checked' : '' %>> Private</label>
+                    </div>
+                </div>
+
+                <button type="submit">Save changes</button>
+            </form>
+        </main>
+    </div>
 </body>
 
 </html>

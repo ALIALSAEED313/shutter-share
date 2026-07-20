@@ -4,22 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <%- include('../partials/navbar') %>
-    <h1>Create a new account!</h1>
-    <form action="/auth/sign-up" method="post">
-      <label for="username">Username:</label>
-      <input type="text" name="username" id="username" />
-      <label for="password">Password:</label>
-      <input type="password" name="password" id="password" />
-      <label for="confirmPassword">Confirm Password:</label>
-      <input type="password" name="confirmPassword" id="confirmPassword" />
-      <div>
-  <label for="profileName">Display Name:</label>
-  <input type="text" name="profileName" id="profileName" required>
-</div>
-      <button type="submit">Sign up</button>
-    </form>
+    <div class="page-shell">
+      <%- include('../partials/navbar') %>
+
+      <main class="auth-shell">
+        <section class="auth-card">
+          <div class="auth-intro">
+            <p class="eyebrow">Join the community</p>
+            <h1>Create your photographer account</h1>
+            <p>Showcase your work, receive reviews, and connect with fellow creatives.</p>
+          </div>
+
+          <form action="/auth/sign-up" method="post" class="form-grid">
+            <div class="field">
+              <label for="username">Username</label>
+              <input type="text" name="username" id="username" placeholder="Choose a username" />
+            </div>
+
+            <div class="field">
+              <label for="password">Password</label>
+              <input type="password" name="password" id="password" placeholder="Create a password" />
+            </div>
+
+            <div class="field">
+              <label for="confirmPassword">Confirm Password</label>
+              <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password" />
+            </div>
+
+            <div class="field">
+              <label for="profileName">Display Name</label>
+              <input type="text" name="profileName" id="profileName" placeholder="Your public name" required />
+            </div>
+
+            <button type="submit">Create account</button>
+          </form>
+        </section>
+      </main>
+    </div>
   </body>
 </html>

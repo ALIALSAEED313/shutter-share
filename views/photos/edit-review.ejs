@@ -4,24 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Review - ShutterShare</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Edit Your Review</h1>
+    <div class="page-shell">
+        <%- include('../partials/navbar.ejs') %>
 
-    <form action="/photos/<%= photo._id %>/reviews/<%= review._id %>?_method=PUT" method="POST">
-        
-        <div>
-            <label for="text">Review:</label>
-            <textarea name="text" id="text" required><%= review.text %></textarea>
-        </div>
+        <main class="panel" style="margin-top: 1rem; max-width: 720px;">
+            <h1>Edit your review</h1>
+            <p>Update your feedback and rating for this photo. Keep your response concise and valuable.</p>
 
-        <div>
-            <label for="rating">Rating (1-5):</label>
-            <input type="number" name="rating" id="rating" min="1" max="5" value="<%= review.rating %>" required>
-        </div>
+            <form action="/photos/<%= photo._id %>/reviews/<%= review._id %>?_method=PUT" method="POST" class="form-grid" style="margin-top: 1.25rem;">
+                <div class="field">
+                    <label for="text">Review</label>
+                    <textarea name="text" id="text" required><%= review.text %></textarea>
+                </div>
 
-        <button type="submit">Update Review</button>
-        <a href="/photos/<%= photo._id %>">Cancel</a>
-    </form>
+                <div class="field">
+                    <label for="rating">Rating (1-5)</label>
+                    <input type="number" name="rating" id="rating" min="1" max="5" value="<%= review.rating %>" required>
+                </div>
+
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: center;">
+                    <button type="submit">Update review</button>
+                    <a class="button button-secondary" href="/photos/<%= photo._id %>">Cancel</a>
+                </div>
+            </form>
+        </main>
+    </div>
 </body>
 </html>

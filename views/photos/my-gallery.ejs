@@ -4,20 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Gallery - ShutterShare</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <%- include('../partials/navbar.ejs') %>
-    <h1>My Gallery</h1>
+    <div class="page-shell">
+        <%- include('../partials/navbar.ejs') %>
 
-    <div class="gallery-container">
-    <% photos.forEach(photo => { %>
-      <div class="photo-card">
-        <img src="<%= photo.imageUrl %>" alt="<%= photo.title %>" style="max-width: 200px;">
-        <h3><%= photo.title %></h3>
-        <p>Status: <%= photo.visibility %></p>
-        <a href="/photos/<%= photo._id %>">View Details</a>
-      </div>
-    <% }) %>
-  </div>
+        <section class="hero">
+            <p class="eyebrow">Your portfolio</p>
+            <h1>My Gallery</h1>
+            <p>Review the collection of photos you’ve shared and select any image to see its full details.</p>
+        </section>
+
+        <div class="gallery-grid">
+            <% if (photos && photos.length > 0) { %>
+                <% photos.forEach(photo => { %>
+                    <article class="photo-card">
+                        <a class="photo-card__link-area" href="/photos/<%= photo._id %>">
+                            <img src="<%= photo.imageUrl %>" alt="<%= photo.title %>">
+                            <div class="photo-card__content">
+                                <h3><%= photo.title %></h3>
+                                <p class="photo-card__meta">Status: <%= photo.visibility %></p>
+                            </div>
+                        </a>
+                    </article>
+                <% }) %>
+            <% } else { %>
+                <p class="empty-state">Your gallery is empty. Upload a few photos to start building your portfolio.</p>
+            <% } %>
+        </div>
+    </div>
 </body>
 </html>

@@ -1,15 +1,14 @@
-<nav>
-    
-    <a href="/">Homepage</a>
-    <% if (user){ %>
-    <a href="/auth/sign-out">Logout</a>
-    <a href="/photos/new">Upload Photo</a>
-    <a href="/photos/my-gallery">My Gallery</a>
-
-    <% } else{ %>
-    <a href="/auth/sign-up">Sign up</a>
-    <a href="/auth/sign-in">Login</a>
-
-    <% } %>
-    
+<nav class="site-header">
+    <a class="brand" href="/">Shutter Share</a>
+    <div class="nav-links">
+        <a href="/">Gallery</a>
+        <% if (user){ %>
+        <a href="/photos/new">Upload</a>
+        <a href="/photos/my-gallery">My Gallery</a>
+        <a href="/auth/sign-out">Logout</a>
+        <% } else{ %>
+        <a href="/auth/sign-up">Sign up</a>
+        <a href="/auth/sign-in">Login</a>
+        <% } %>
+    </div>
 </nav>

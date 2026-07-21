@@ -1,48 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sign Up</title>
     <link rel="stylesheet" href="/css/style.css" />
-  </head>
-  <body>
+</head>
+
+<body>
     <div class="page-shell">
-      <%- include('../partials/navbar') %>
+        <%- include('../partials/navbar') %>
 
-      <main class="auth-shell">
-        <section class="auth-card">
-          <div class="auth-intro">
-            <p class="eyebrow">Join the community</p>
-            <h1>Create your photographer account</h1>
-            <p>Showcase your work, receive reviews, and connect with fellow creatives.</p>
-          </div>
+            <main class="auth-shell">
+                <section class="auth-card">
+                    <div class="auth-intro">
+                        <p class="eyebrow">Join the community</p>
+                        <h1>Create your photographer account</h1>
+                        <p>Showcase your work, receive reviews, and connect with fellow creatives.</p>
+                    </div>
 
-          <form action="/auth/sign-up" method="post" class="form-grid">
-            <div class="field">
-              <label for="username">Username</label>
-              <input type="text" name="username" id="username" placeholder="Choose a username" />
-            </div>
+                    <form action="/auth/sign-up" method="post" class="form-grid">
+                        <div class="field">
+                            <label for="username">Username <span style="color: red;">*</span></label>
+                            <input type="text" name="username" id="username" placeholder="Choose a username" required />
+                        </div>
+                        <div class="field">
+                            <label for="email">Email Address <span style="color: red;">*</span></label>
+                            <input type="email" name="email" id="email" placeholder="Enter your email" required />
+                        </div>
 
-            <div class="field">
-              <label for="password">Password</label>
-              <input type="password" name="password" id="password" placeholder="Create a password" />
-            </div>
 
-            <div class="field">
-              <label for="confirmPassword">Confirm Password</label>
-              <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm your password" />
-            </div>
+                        <div class="field">
+                            <label for="password">Password <span style="color: red;">*</span></label>
+                            <input type="password" name="password" id="password" placeholder="At least 8 characters"
+                                required />
+                        </div>
+                        <small>Password must be at least 8 characters long.</small>
 
-            <div class="field">
-              <label for="profileName">Display Name</label>
-              <input type="text" name="profileName" id="profileName" placeholder="Your public name" required />
-            </div>
+                        <div class="field">
+                            <label for="confirmPassword">Confirm Password <span style="color: red;">*</span></label>
+                            <input type="password" name="confirmPassword" id="confirmPassword"
+                                placeholder="Confirm your password" />
+                        </div>
 
-            <button type="submit">Create account</button>
-          </form>
-        </section>
-      </main>
+
+                        <div class="field">
+                            <label for="profileName">Display Name <span style="color: red;">*</span></label>
+                            <input type="text" name="profileName" id="profileName" placeholder="Your public name"
+                                required />
+                        </div>
+
+                        <button type="submit">Create account</button>
+                    </form>
+                </section>
+            </main>
     </div>
-  </body>
+</body>
+
 </html>

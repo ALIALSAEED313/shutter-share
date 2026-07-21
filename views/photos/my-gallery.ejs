@@ -30,7 +30,12 @@
                     </article>
                 <% }) %>
             <% } else { %>
-                <p class="empty-state">Your gallery is empty. Upload a few photos to start building your portfolio.</p>
+                <div class="empty-state-card">
+                    <p class="eyebrow">No photos yet</p>
+                    <h3>Your gallery is waiting for its first frame</h3>
+                    <p>Upload a few photos to start building your portfolio and share your work with the community.</p>
+                    <a class="button button-primary" href="/photos/new">Upload your first photo</a>
+                </div>
             <% } %>
         </div>
     </div>

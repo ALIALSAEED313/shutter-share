@@ -10,5 +10,29 @@
         <a href="/auth/sign-up">Sign up</a>
         <a href="/auth/sign-in">Login</a>
         <% } %>
+        <button type="button" class="theme-toggle" id="themeToggle" aria-label="Toggle color theme">☀️</button>
     </div>
 </nav>
+
+<script>
+  const toggleButton = document.getElementById('themeToggle');
+  const root = document.documentElement;
+
+  const applyTheme = (theme) => {
+    root.setAttribute('data-theme', theme);
+    if (toggleButton) {
+      toggleButton.textContent = theme === 'light' ? '🌙' : '☀️';
+    }
+  };
+
+  const savedTheme = localStorage.getItem('shutter-theme') || 'dark';
+  applyTheme(savedTheme);
+
+  if (toggleButton) {
+    toggleButton.addEventListener('click', () => {
+      const nextTheme = root.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      localStorage.setItem('shutter-theme', nextTheme);
+      applyTheme(nextTheme);
+    });
+  }
+</script>

@@ -9,15 +9,7 @@ dotenv.config()
 
 require('dns').setDefaultResultOrder('ipv4first');
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: 'alialsaeed.p@gmail.com',
-    pass: process.env.GMAIL_APP_PASSWORD
-  }
-});
+
 
 
 // Sign up routes

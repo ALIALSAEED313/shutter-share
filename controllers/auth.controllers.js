@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require("../models/User.js");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto")
-const nodemailer = require("nodemailer")
+
 const dotenv = require("dotenv")
 dotenv.config()
 
@@ -96,7 +96,6 @@ router.get("/forgot-password", (req, res) => {
 });
 
 router.post("/forgot-password", async (req, res) => {
-  // 1. Start the TRY block immediately
   try {
     console.log("1. Route hit! Looking for email:", req.body.email);
 
@@ -104,7 +103,7 @@ router.post("/forgot-password", async (req, res) => {
     console.log("2. Database search finished. Found user:", !!user);
 
     if (!user) {
-      return res.send("No account with that email exists, a reset link has been sent to the email address associated with that account.");
+      return res.send("If an account with that email exists, a reset link has been sent to it.");
     }
 
     const token = crypto.randomBytes(20).toString('hex');
@@ -116,27 +115,41 @@ router.post("/forgot-password", async (req, res) => {
     console.log("4. Token saved.");
 
     const resetUrl = `${process.env.BASE_URL}/auth/reset-password/${token}`;
-    const mailOptions = {
-      from: 'alialsaeed.p@gmail.com',
-      to: user.email,
-      subject: 'Password Reset',
-      html: `
-        <h3>Password Reset</h3>
-        <p>You requested a password reset. Click the link below to set a new password:</p>
-        <a href="${resetUrl}">Reset Password</a>
-        <p>This link will expire in 1 hour.</p>
-        <p>If you did not request this, please ignore this email.</p>
-      `
-    };
+    
+    console.log("5. Attempting to send email via Brevo API...");
+    
+    // We use standard fetch instead of transporter.sendMail
+    const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'api-key': process.env.BREVO_API_KEY,
+        'content-type': 'application/json'
+      },
+      body: JSON.stringify({
+        sender: { email: 'alialsaeed.p@gmail.com', name: 'Shutter Share' },
+        to: [{ email: user.email }],
+        subject: 'Shutter Share - Password Reset',
+        htmlContent: `
+          <h3>Password Reset</h3>
+          <p>You requested a password reset. Click the link below to set a new password:</p>
+          <a href="${resetUrl}">Reset Password</a>
+          <p>This link will expire in 1 hour.</p>
+          <p>If you did not request this, please ignore this email.</p>
+        `
+      })
+    });
 
-    console.log("5. Attempting to send email...");
-    await transporter.sendMail(mailOptions);
-    console.log("6. Email sent successfully!");
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("CRITICAL ERROR FROM BREVO:", errorData);
+      return res.send("There was an error sending the email. Please try again later.");
+    }
 
+    console.log("6. Email sent successfully to any user!");
     res.send("An email has been sent to the address associated with that account with further instructions.");
 
   } catch (err) {
-    // 2. Catch any error that happens anywhere in the route above
     console.error("CRITICAL ERROR IN FORGOT PASSWORD:", err);
     res.send("There was an error processing your request. Please try again later.");
   }

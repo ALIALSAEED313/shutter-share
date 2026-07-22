@@ -39,7 +39,7 @@ This project was built as a full-stack web application using Node.js, Express, E
 - Custom CSS for the user interface
 
 ## Getting Started
-**Check out the live app here:**  https://shutter-share.onrender.com]
+**Check out the live app here:**  https://shutter-share.onrender.com
 
 ### Prerequisites
 
